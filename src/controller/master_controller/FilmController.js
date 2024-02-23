@@ -21,8 +21,26 @@ getWhereFilm = async (req, res) => {
     return api.ok(res, data);
 }
 
+insertFilm = async (req, res) => {
+    let data = await model.insert(req.body.form_data);
+    return api.ok(res, data);
+}
+
+updateFilm = async (req, res) => {
+    let data = await model.update(req.params.id, req.body.form_data);
+    return api.ok(res, data);
+}
+
+deleteFilm = async (req, res) => {
+    let data = await model.deleteData(req.params.id);
+    return api.ok(res, data);
+}
+
 module.exports = {
   getFilmByID,
   getAllFilm,
-  getWhereFilm
+  getWhereFilm,
+  insertFilm,
+  updateFilm,
+  deleteFilm
 };
