@@ -16,7 +16,13 @@ getAllFilm = async (req, res) => {
     return api.ok(res, data);
 }
 
+getWhereFilm = async (req, res) => {
+    let data = await model.getWhere(req.params.column, req.params.value);
+    return api.ok(res, data);
+}
+
 module.exports = {
   getFilmByID,
   getAllFilm,
+  getWhereFilm
 };
