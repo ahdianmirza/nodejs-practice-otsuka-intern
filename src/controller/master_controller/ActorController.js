@@ -1,11 +1,53 @@
-const model = require("../../model/sakila.model");
+const model = require("../../model/actor.model");
 const api = require("../../tools/common");
 
-getAllActorData = async (req, res) => {
-  let data = await model.getAllActor();
+getAllActor = async (req, res) => {
+  let data = await model.getAll();
   return api.ok(res, data);
 };
 
+getActorByID = async (req, res) => {
+  if (!isNaN(req.params.id)) {
+    let data = await model.getById(req.params.id);
+    return api.ok(res, data);
+  } else {
+    return api.error(res, "bad request", 400);
+  }
+};
+
+getWhereActor = async (req, res) => {
+  let data = await model.getWhere(req.params.column, req.params.value);
+  return api.ok(res, data);
+};
+
+insertActor = async (req, res) => {
+  let data = await model.insert(req.body.form_data);
+  return api.ok(res, data);
+};
+
+updateActor = async (req, res) => {
+  if (!isNaN(req.params.id)) {
+    let data = await model.update(req.params.id, req.body.form_data);
+    return api.ok(res, data);
+  } else {
+    return api.error(res, "bad request", 400);
+  }
+};
+
+deleteActor = async (req, res) => {
+  if (!isNaN(req.params.id)) {
+    let data = await model.deleteData(req.params.id);
+    return api.ok(res, data);
+  } else {
+    return api.error(res, "bad request", 400);
+  }
+}
+
 module.exports = {
-  getAllActorData,
+  getAllActor,
+  getActorByID,
+  getWhereActor,
+  insertActor,
+  updateActor,
+  deleteActor
 };

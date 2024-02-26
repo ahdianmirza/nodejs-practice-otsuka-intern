@@ -13,6 +13,11 @@ router.put("/film/:id", FilmController.updateFilm);
 router.delete("/film/:id", FilmController.deleteFilm);
 
 // actor data
-router.get("/actor", ActorController.getAllActorData);
+router.get("/actor", ActorController.getAllActor);
+router.get("/actor/:id", ActorController.getActorByID);
+router.get("/actor/:column/:value", ActorController.getWhereActor);
+router.post("/actor", ActorController.insertActor);
+router.put("/actor/:id", ActorController.updateActor);
+router.delete("/actor/:id", ActorController.deleteActor);
 
 module.exports = router;
