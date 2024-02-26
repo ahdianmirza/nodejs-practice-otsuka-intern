@@ -21,7 +21,16 @@ const loginAPI = async (username, password) => {
 }
 
 const generateToken = userData => {
-    return jwt.sign(userData, SECRET_KEY, {expiresIn: "24h"});
+    return jwt.sign(
+      {
+        userInfo: {
+          username: userData.user_name,
+          permission: userData.permission,
+        },
+      },
+      SECRET_KEY,
+      { expiresIn: "24h" }
+    );
 };
 
 const verifyToken = (req, res, next) => {
@@ -37,13 +46,26 @@ const verifyToken = (req, res, next) => {
             return res.status(403).json({error: "Failed to authenticate token"});
         }
 
-        req.user = decode;
+        req.user = decode.userInfo.username;
+        req.permission = decode.userInfo.permission;
+        req.data = decode.userInfo
         next();
     });
 }
 
-module.exports = {
-    generateToken,
-    verifyToken,
-    loginAPI
+const hasAccess = (...allowedPermission) => {
+    return (req, res, next) => {
+        if (!req?.permission) return res.status(401).json({message: "Something wrong"});
+        const permissionArray = [...allowedPermission];
+        const result = permissionArray.find(permission => req.permission == permission);
+        if (!result) return res.status(401).json({message: "Permission doesn't match", data: req.data});
+        next();
+    }
 }
+
+module.exports = {
+  generateToken,
+  verifyToken,
+  loginAPI,
+  hasAccess,
+};

@@ -21,7 +21,6 @@ const login = async (req, res) => {
 
     // if user match with user
     if (userData.length > 0) {
-        console.info(`userData: ${userData}`);
         token = generateToken({...userData[0]});
         return res.json({userData, token});
     } else {
