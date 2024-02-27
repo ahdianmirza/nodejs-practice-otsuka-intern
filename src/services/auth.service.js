@@ -53,12 +53,17 @@ const verifyToken = (req, res, next) => {
     });
 }
 
-const hasAccess = (...allowedPermission) => {
+const hasAccess = (allowedPermission) => {
     return (req, res, next) => {
         if (!req?.permission) return res.status(401).json({message: "Something wrong"});
-        const permissionArray = [...allowedPermission];
-        const result = permissionArray.find(permission => req.permission == permission);
-        if (!result) return res.status(401).json({message: "Permission doesn't match", data: req.data});
+        const arrayPermission = req.permission.split(',');
+        console.info(`arrayPermission: ${arrayPermission}`);
+        const result = arrayPermission.find((permission) => permission == allowedPermission ? true : false);
+        if (!result) return res.status(401).json({
+            message: "forbidden",
+            data: req.data,
+            result: result
+        });
         next();
     }
 }
